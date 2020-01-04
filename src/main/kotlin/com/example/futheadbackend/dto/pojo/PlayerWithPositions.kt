@@ -3,8 +3,8 @@ package com.example.futheadbackend.dto.pojo
 import com.example.futheadbackend.dto.contract.PlayerContract
 
 data class PlayerWithPositions(
-        override val id: Int,
-        override val name: String,
+        override val playerId: Int,
+        override val playerName: String,
         override val image: String,
         override val nationality: String,
         override val age: Int,

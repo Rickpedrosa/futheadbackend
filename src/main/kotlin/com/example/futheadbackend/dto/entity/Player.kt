@@ -1,13 +1,14 @@
 package com.example.futheadbackend.dto.entity
 
 import com.example.futheadbackend.dto.contract.PlayerContract
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
 data class Player(
-        @Id override val id: Int,
-        override val name: String,
+        @Id @Column(name = "id") override val playerId: Int,
+        @Column(name = "name") override val playerName: String,
         override val image: String,
         override val nationality: String,
         override val age: Int,
@@ -16,3 +17,5 @@ data class Player(
         override var wage: Long,
         override val potential: Int
 ) : PlayerContract
+
+const val PLAYER_BY_ID = "SELECT * FROM players WHERE id = :id"

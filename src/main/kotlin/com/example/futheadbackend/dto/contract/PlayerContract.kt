@@ -1,8 +1,8 @@
 package com.example.futheadbackend.dto.contract
 
 interface PlayerContract {
-    val id: Int
-    val name: String
+    val playerId: Int
+    val playerName: String
     val image: String
     val nationality: String
     val potential: Int

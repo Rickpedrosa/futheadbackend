@@ -1,5 +1,6 @@
 package com.example.futheadbackend.service
 
+import com.example.futheadbackend.dto.entity.Player
 import com.example.futheadbackend.dto.pojo.PlayerWithPositions
 import com.example.futheadbackend.dto.sqldatarow.streamOfPlayer
 import com.example.futheadbackend.repository.PlayerRepository
@@ -20,11 +21,15 @@ class PlayerService(@Autowired private val playerRepository: PlayerRepository) :
                 .toList()
         source.forEach { u ->
             players.forEach {
-                if (it.id == u.getId()) {
+                if (it.playerId == u.getId()) {
                     it.positions.add(u.getPosition())
                 }
             }
         }
         return players
+    }
+
+    override fun getPlayerById(id: Int): Player {
+        return playerRepository.findPlayerById(id)
     }
 }

@@ -1,8 +1,9 @@
 package com.example.futheadbackend.dto.contract
 
+@Suppress("PropertyName")
 interface TeamContract {
-    val name: String
-    val id: Int?
+    val teamName: String
+    val teamId: Int?
     val logox2: String?
     val logox4: String?
     val logox6: String?
