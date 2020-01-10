@@ -29,7 +29,7 @@ class PlayerService(@Autowired private val playerRepository: PlayerRepository) :
         return players
     }
 
-    override fun getPlayerById(id: Int): Player {
+    override fun getPlayerById(id: Int): Player? {
         return playerRepository.findPlayerById(id)
     }
 }

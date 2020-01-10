@@ -17,4 +17,3 @@ data class Team(
         override var quality: Float
 ) : TeamContract
 
-const val TEAMS_BY_NAME = "SELECT * FROM teams WHERE name LIKE :club LIMIT 20"

@@ -15,9 +15,9 @@ class PlayerController(@Autowired private val playerService: PlayerService) {
         return playerService.findPlayerWithPositions(club)
     }
 
-    @GetMapping
+    @RequestMapping(value = ["/{id}"])
     @ResponseBody
-    fun getPlayerById(@RequestParam("id") id: Int): Player {
+    fun getPlayerById(@PathVariable("id") id: Int): Player? {
         return playerService.getPlayerById(id)
     }
 }

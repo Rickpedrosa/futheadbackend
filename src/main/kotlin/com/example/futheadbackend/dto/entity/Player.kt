@@ -18,4 +18,3 @@ data class Player(
         override val potential: Int
 ) : PlayerContract
 
-const val PLAYER_BY_ID = "SELECT * FROM players WHERE id = :id"
