@@ -20,7 +20,25 @@ class TeamController(@Autowired private val teamService: TeamService) {
     @RequestMapping(value = ["/golden"])
     @ResponseBody
     fun getGoldenClubs(@RequestParam("page") page: Int): Page<Team> {
-        return teamService.getFiveStarsClubs(PageRequest.of(
+        return teamService.getGoldenClubs(PageRequest.of(
+                page,
+                30,
+                Sort.by("average").descending()))
+    }
+
+    @RequestMapping(value = ["/silver"])
+    @ResponseBody
+    fun getSilverClubs(@RequestParam("page") page: Int): Page<Team> {
+        return teamService.getSilverClubs(PageRequest.of(
+                page,
+                30,
+                Sort.by("average").descending()))
+    }
+
+    @RequestMapping(value = ["/bronze"])
+    @ResponseBody
+    fun getBronzeClubs(@RequestParam("page") page: Int): Page<Team> {
+        return teamService.getBronzeClubs(PageRequest.of(
                 page,
                 30,
                 Sort.by("average").descending()))

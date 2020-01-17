@@ -9,23 +9,17 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface PlayerRepository : CrudRepository<Player, Int> {
-    @Query(value = FROM_CLUB, nativeQuery = true)
+    @Query(value = "SELECT p.*, pos.pos AS position " +
+            "FROM players p INNER JOIN playerpositions pos ON pos.player_id = p.id INNER JOIN teams t ON t.name = p.club " +
+            "WHERE p.club LIKE :club ORDER BY p.potential DESC",
+            nativeQuery = true)
     fun findPlayerWithPositions(club: String): List<PlayerWithPosSQLRow>
 
-    @Query(value = PLAYER_BY_ID, nativeQuery = true)
+    @Query(value = "SELECT * FROM players WHERE id = :id", nativeQuery = true)
     fun findPlayerById(id: Int): Player?
 
-//    @Query(value = GOLD_PLAYERS_WITH_OFFSET,
-//            countQuery = GOLD_PLAYERS_COUNT,
-//            nativeQuery = true)
-//    fun getSliceOfGoldPlayers(): Page<PlayerWithPosSQLRow>
 }
 
-const val FROM_CLUB = "SELECT p.*, pos.pos AS position " +
-        "FROM players p INNER JOIN playerpositions pos ON pos.player_id = p.id " +
-        "INNER JOIN teams t ON t.name = p.club " +
-        "WHERE p.club LIKE :club " +
-        "ORDER BY p.potential DESC"
 
 const val GOLD_PLAYERS_WITH_OFFSET = "SELECT p.*, pos.pos AS position " +
         "FROM (SELECT * " +
@@ -40,4 +34,3 @@ const val GOLD_PLAYERS_COUNT = "SELECT COUNT(id) " +
         "WHERE potential >= 75 " +
         "ORDER BY potential DESC"
 
-const val PLAYER_BY_ID = "SELECT * FROM players WHERE id = :id"

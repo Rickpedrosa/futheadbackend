@@ -7,18 +7,21 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface TeamRepository : CrudRepository<Team, String> {
-    @Query(value = TEAMS_BY_NAME, nativeQuery = true)
+    @Query(value = "SELECT * FROM teams WHERE name LIKE ?1", nativeQuery = true)
     fun getClubsFilteredByText(id: String): List<Team?>
 
-    @Query(value = FIVE_STARS_CLUBS,
-            countQuery = FIVE_STARS_CLUBS_COUNT,
+    @Query(value = "SELECT * FROM teams WHERE quality BETWEEN 4.5 AND 5 ORDER BY quality DESC",
+            countQuery = "SELECT COUNT(name) FROM teams WHERE quality BETWEEN 4.5 AND 5 ORDER BY quality DESC",
             nativeQuery = true)
-    fun getFiveStarsClubs(pageable: Pageable): Page<Team>
-}
+    fun getGoldenClubs(pageable: Pageable): Page<Team>
 
-const val TEAMS_BY_NAME = "SELECT * FROM teams WHERE name LIKE ?1"
-const val FIVE_STARS_CLUBS = "SELECT * FROM teams WHERE quality = 5 ORDER BY quality DESC"
-const val FIVE_STARS_CLUBS_COUNT = "SELECT COUNT(name) " +
-        "FROM teams " +
-        "WHERE quality = 5 " +
-        "ORDER BY quality DESC"
+    @Query(value = "SELECT * FROM teams WHERE quality BETWEEN 4 AND 3 ORDER BY quality DESC",
+            countQuery = "SELECT COUNT(name) FROM teams WHERE quality BETWEEN 4 AND 3 ORDER BY quality DESC",
+            nativeQuery = true)
+    fun getSilverClubs(pageable: Pageable): Page<Team>
+
+    @Query(value = "SELECT * FROM teams WHERE quality < 3 ORDER BY quality DESC",
+            countQuery = "SELECT COUNT(name) FROM teams WHERE quality < 3 ORDER BY quality DESC",
+            nativeQuery = true)
+    fun getBronzeClubs(pageable: Pageable): Page<Team>
+}
