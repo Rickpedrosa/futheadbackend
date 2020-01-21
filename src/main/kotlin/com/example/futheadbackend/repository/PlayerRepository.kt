@@ -5,10 +5,11 @@ import com.example.futheadbackend.dto.entity.Player
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
-interface PlayerRepository : CrudRepository<Player, Int> {
+interface PlayerRepository : CrudRepository<Player, Int>, JpaSpecificationExecutor<Player> {
     @Query(value = "SELECT p.*, pos.pos AS position " +
             "FROM players p INNER JOIN playerpositions pos ON pos.player_id = p.id INNER JOIN teams t ON t.name = p.club " +
             "WHERE p.club LIKE :club ORDER BY p.potential DESC",
@@ -17,7 +18,6 @@ interface PlayerRepository : CrudRepository<Player, Int> {
 
     @Query(value = "SELECT * FROM players WHERE id = :id", nativeQuery = true)
     fun findPlayerById(id: Int): Player?
-
 }
 
 
