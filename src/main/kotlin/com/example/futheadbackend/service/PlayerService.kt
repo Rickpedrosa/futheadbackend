@@ -2,6 +2,7 @@ package com.example.futheadbackend.service
 
 import com.example.futheadbackend.dto.entity.Player
 import com.example.futheadbackend.dto.pojo.PlayerWithPositions
+import com.example.futheadbackend.dto.pojo.SearchCriteria
 import com.example.futheadbackend.dto.sqldatarow.streamOfPlayer
 import com.example.futheadbackend.repository.PlayerRepository
 import com.example.futheadbackend.repository.impls.PlayerRepositoryImpl
@@ -31,6 +32,10 @@ class PlayerService(@Autowired private val playerRepository: PlayerRepository) :
 
     override fun getPlayerById(id: Int): Player? {
         return playerRepository.findPlayerById(id)
+    }
+
+    override fun getPlayersBySearchCriteria(criteria: List<SearchCriteria>): List<Player?> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

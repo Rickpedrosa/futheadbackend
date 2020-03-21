@@ -4,8 +4,10 @@ import com.example.futheadbackend.dto.contract.PlayerContract
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
+@Table(name = "players")
 data class Player(
         @Id @Column(name = "id") override val playerId: Int,
         @Column(name = "name") override val playerName: String,
