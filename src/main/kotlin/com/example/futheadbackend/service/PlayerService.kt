@@ -6,6 +6,7 @@ import com.example.futheadbackend.dto.pojo.SearchCriteria
 import com.example.futheadbackend.dto.sqldatarow.streamOfPlayer
 import com.example.futheadbackend.repository.PlayerRepository
 import com.example.futheadbackend.repository.impls.PlayerRepositoryImpl
+import com.example.futheadbackend.specifications.PlayerSpecifications
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import kotlin.streams.toList
@@ -35,7 +36,13 @@ class PlayerService(@Autowired private val playerRepository: PlayerRepository) :
     }
 
     override fun getPlayersBySearchCriteria(criteria: List<SearchCriteria>): List<Player?> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val fullSpecification = PlayerSpecifications(criteria[0])
+        if (criteria.size > 1) {
+            for (i in 1 until criteria.size) {
+                fullSpecification.and(PlayerSpecifications(criteria[i]))
+            }
+        }
+        return playerRepository.findAll(fullSpecification)
     }
 
 }

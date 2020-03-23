@@ -21,14 +21,22 @@ class TeamServiceTest(@Autowired private val teamRepository: TeamRepository,
 
     @Test
     fun trySpecifications() {
-        val players = playerRepository.findAll(
-                PlayerSpecifications(
-                        SearchCriteria(
-                                "potential",
-                                ">",
-                                "messi")))
+        val spec = PlayerSpecifications(SearchCriteria(
+                "potential",
+                ">",
+                "85"))
+                .and(PlayerSpecifications(SearchCriteria(
+                        "nationality",
+                        ":",
+                        "Spain")))
+                ?.and(PlayerSpecifications(SearchCriteria(
+                        "age",
+                        ">",
+                        "30")))
+        val players = playerRepository.findAll(where(spec))
 
         println("${players.size}")
+        players.forEach(::println)
     }
 //    @Test
 //    fun testPlayerCall() {
