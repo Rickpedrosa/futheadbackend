@@ -1,6 +1,7 @@
 package com.example.futheadbackend.repository.impls
 
 import com.example.futheadbackend.dto.entity.Team
+import com.example.futheadbackend.dto.pojo.RandomTeam
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -9,4 +10,5 @@ interface TeamRepositoryImpl {
     fun getGoldenClubs(pageable: Pageable): Page<Team>
     fun getSilverClubs(pageable: Pageable): Page<Team>
     fun getBronzeClubs(pageable: Pageable): Page<Team>
+    fun getRandomClubs(random: Int): List<RandomTeam>
 }

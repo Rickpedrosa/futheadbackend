@@ -1,6 +1,7 @@
 package com.example.futheadbackend.repository
 
 import com.example.futheadbackend.dto.entity.Team
+import com.example.futheadbackend.dto.sqldatarow.RandomTeamsSQLRow
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.Query
@@ -24,4 +25,13 @@ interface TeamRepository : CrudRepository<Team, String> {
             countQuery = "SELECT COUNT(name) FROM teams WHERE quality < 3 ORDER BY quality DESC",
             nativeQuery = true)
     fun getBronzeClubs(pageable: Pageable): Page<Team>
+
+    @Query(value = """
+        SELECT t.*, p.*, pos.pos
+        FROM (SELECT * FROM teams  WHERE quality BETWEEN 4 AND 5 ORDER BY RAND() LIMIT :random) t
+        INNER JOIN players p ON p.club = t.name
+        INNER JOIN playerpositions pos ON p.id = pos.player_id
+        ORDER BY t.name, p.potential DESC, p.name """,
+            nativeQuery = true)
+    fun getRandomClubs(random: Int): List<RandomTeamsSQLRow>
 }
