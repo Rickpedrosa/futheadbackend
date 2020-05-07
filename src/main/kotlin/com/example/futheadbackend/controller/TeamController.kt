@@ -1,6 +1,7 @@
 package com.example.futheadbackend.controller
 
 import com.example.futheadbackend.dto.entity.Team
+import com.example.futheadbackend.dto.pojo.RandomTeam
 import com.example.futheadbackend.service.TeamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -43,5 +44,11 @@ class TeamController(@Autowired private val teamService: TeamService) {
                 page,
                 30,
                 Sort.by("average").descending()))
+    }
+
+    @RequestMapping(value = ["/random"])
+    @ResponseBody
+    fun getRandomTeams(@RequestParam("size") random: Int): List<RandomTeam> {
+        return teamService.getRandomClubs(random)
     }
 }

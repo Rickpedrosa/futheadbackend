@@ -20,8 +20,8 @@ interface RandomTeamsSQLRow {
     fun getClub(): String
     fun getValue(): Long
     fun getWage(): Long
-    fun getPosition(): String
     fun getPotential(): Int
+    fun getPosition(): String
 }
 
 //fun RandomTeamsSQLRow.streamOfRandomTeam(): Stream<RandomTeam> {

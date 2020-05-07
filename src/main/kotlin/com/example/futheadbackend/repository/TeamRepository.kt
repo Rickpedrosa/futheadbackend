@@ -27,11 +27,13 @@ interface TeamRepository : CrudRepository<Team, String> {
     fun getBronzeClubs(pageable: Pageable): Page<Team>
 
     @Query(value = """
-        SELECT t.*, p.*, pos.pos
-        FROM (SELECT * FROM teams  WHERE quality BETWEEN 4 AND 5 ORDER BY RAND() LIMIT :random) t
-        INNER JOIN players p ON p.club = t.name
-        INNER JOIN playerpositions pos ON p.id = pos.player_id
-        ORDER BY t.name, p.potential DESC, p.name """,
+    SELECT t.name as clubName, t.id as clubId, t.logox2, t.logox4, t.logox6, t.average, t.eleven_average as teamAverage, t.quality,
+    p.id, p.name, p.image, p.nationality, p.age, p.club, p.value, p.wage, p.potential,
+    pos.pos as position
+    FROM (SELECT * FROM teams  WHERE quality BETWEEN 4 AND 5 ORDER BY RAND() LIMIT :random) t
+    INNER JOIN players p ON p.club = t.name
+    INNER JOIN playerpositions pos ON p.id = pos.player_id
+    ORDER BY t.name, p.potential DESC, p.name""",
             nativeQuery = true)
     fun getRandomClubs(random: Int): List<RandomTeamsSQLRow>
 }
