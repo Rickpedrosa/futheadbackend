@@ -20,18 +20,3 @@ interface PlayerRepository : JpaRepository<Player, Int>, JpaSpecificationExecuto
     @Query(value = "SELECT * FROM players WHERE id = :id", nativeQuery = true)
     fun findPlayerById(id: Int): Player?
 }
-
-
-const val GOLD_PLAYERS_WITH_OFFSET = "SELECT p.*, pos.pos AS position " +
-        "FROM (SELECT * " +
-        "FROM players " +
-        " WHERE potential >= 75 " +
-        "ORDER BY potential DESC " +
-        "LIMIT 30 OFFSET :offset) p " +
-        "INNER JOIN playerpositions pos ON pos.player_id = p.id"
-
-const val GOLD_PLAYERS_COUNT = "SELECT COUNT(id) " +
-        "FROM players " +
-        "WHERE potential >= 75 " +
-        "ORDER BY potential DESC"
-

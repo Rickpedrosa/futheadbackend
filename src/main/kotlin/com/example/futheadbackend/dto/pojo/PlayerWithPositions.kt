@@ -1,18 +1,16 @@
 package com.example.futheadbackend.dto.pojo
 
-import com.example.futheadbackend.dto.contract.PlayerContract
-
 data class PlayerWithPositions(
-        override val playerId: Int,
-        override val playerName: String,
-        override val image: String,
-        override val nationality: String,
-        override val age: Int,
-        override val club: String,
-        override var value: Long,
-        override var wage: Long,
-        override val potential: Int
-) : PlayerContract {
+        val playerId: Int,
+        val playerName: String,
+        val image: String,
+        val nationality: String,
+        val age: Int,
+        val club: String,
+        var value: Long,
+        var wage: Long,
+        val potential: Int
+) {
     var positions: MutableList<String> = mutableListOf()
 }
 

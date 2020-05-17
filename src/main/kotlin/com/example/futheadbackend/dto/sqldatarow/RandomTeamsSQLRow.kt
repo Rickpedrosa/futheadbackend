@@ -1,8 +1,5 @@
 package com.example.futheadbackend.dto.sqldatarow
 
-import com.example.futheadbackend.dto.pojo.RandomTeam
-import java.util.stream.Stream
-
 interface RandomTeamsSQLRow {
     fun getClubName(): String
     fun getClubId(): Int?
@@ -23,25 +20,3 @@ interface RandomTeamsSQLRow {
     fun getPotential(): Int
     fun getPosition(): String
 }
-
-//fun RandomTeamsSQLRow.streamOfRandomTeam(): Stream<RandomTeam> {
-//    return Stream.of(RandomTeam(
-//            this.getId(),
-//            this.getName(),
-//            this.getClub(),
-//            this.getClubId(),
-//            this.getImage(),
-//            this.getNationality(),
-//            this.getPotential(),
-//            this.getAge(),
-//            this.getClubName(),
-//            this.getValue(),
-//            this.getWage(),
-//            this.getLogox2(),
-//            this.getLogox4(),
-//            this.getLogox6(),
-//            this.getAverage(),
-//            this.getTeamAverage(),
-//            this.getQuality()
-//    ))
-//}

@@ -1,7 +1,5 @@
 package com.example.workspace
 
-import java.util.*
-
 fun main() {
     tournament()
 }
