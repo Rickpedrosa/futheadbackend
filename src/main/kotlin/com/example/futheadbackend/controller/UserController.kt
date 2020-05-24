@@ -1,5 +1,6 @@
 package com.example.futheadbackend.controller
 
+import com.example.futheadbackend.dto.entity.Tournament
 import com.example.futheadbackend.dto.entity.User
 import com.example.futheadbackend.dto.response.OnSaveUserResponse
 import com.example.futheadbackend.service.UserService
@@ -20,4 +21,9 @@ class UserController(@Autowired val userService: UserService) {
     fun registerUser(@RequestBody user: User): OnSaveUserResponse {
         return userService.registerUser(user)
     }
+
+//    @RequestMapping(value = ["/{userName}/tournaments"])
+//    fun getUserTournaments(@PathVariable("userName") userName: String): List<Tournament> {
+//        return userService.getTournamentsPerUser(userName)
+//    }
 }

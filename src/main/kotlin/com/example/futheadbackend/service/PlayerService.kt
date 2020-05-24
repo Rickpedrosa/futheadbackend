@@ -7,8 +7,11 @@ import com.example.futheadbackend.dto.sqldatarow.streamOfPlayer
 import com.example.futheadbackend.repository.PlayerRepository
 import com.example.futheadbackend.repository.impls.PlayerRepositoryImpl
 import com.example.futheadbackend.specifications.PlayerSpecifications
+import org.hibernate.Hibernate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
+import javax.transaction.Transactional
 import kotlin.streams.toList
 
 @Service
@@ -31,8 +34,11 @@ class PlayerService(@Autowired private val playerRepository: PlayerRepository) :
         return players
     }
 
-    override fun getPlayerById(id: Int): Player? {
-        return playerRepository.findPlayerById(id)
+    @Transactional
+    override fun getPlayerById(id: Int): Optional<Player> {
+        val player =  playerRepository.findById(id)
+        Hibernate.initialize(player.get().positions)
+        return player
     }
 
     override fun getPlayersBySearchCriteria(criteria: List<SearchCriteria>): List<Player?> {

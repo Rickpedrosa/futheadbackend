@@ -1,9 +1,6 @@
 package com.example.futheadbackend.dto.entity
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "players")
@@ -16,6 +13,25 @@ data class Player(
         val club: String,
         var value: Long,
         var wage: Long,
-        val potential: Int
-)
+        val potential: Int,
+        @ManyToMany(
+                fetch = FetchType.LAZY,
+                cascade = [CascadeType.PERSIST, CascadeType.MERGE]
+        )
+        @JoinTable(
+                name = "playerpositions",
+                joinColumns = [JoinColumn(name = "player_id")],
+                inverseJoinColumns = [JoinColumn(name = "pos")]
+        )
+        val positions: MutableSet<Positions> = mutableSetOf()
+) {
+    override fun hashCode(): Int {
+        return playerId.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        other as Player
+        return other.playerId == this.playerId
+    }
+}
 

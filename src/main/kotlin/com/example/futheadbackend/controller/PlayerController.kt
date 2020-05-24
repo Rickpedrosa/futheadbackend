@@ -6,6 +6,7 @@ import com.example.futheadbackend.dto.pojo.SearchCriteria
 import com.example.futheadbackend.service.PlayerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.util.*
 import java.util.regex.Pattern
 
 @CrossOrigin(origins = ["http://localhost:4200"])
@@ -20,7 +21,7 @@ class PlayerController(@Autowired private val playerService: PlayerService) {
 
     @RequestMapping(value = ["/{id}"])
     @ResponseBody
-    fun getPlayerById(@PathVariable("id") id: Int): Player? {
+    fun getPlayerById(@PathVariable("id") id: Int): Optional<Player> {
         return playerService.getPlayerById(id)
     }
 
