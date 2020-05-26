@@ -1,10 +1,9 @@
 package com.example.futheadbackend.dto.entity
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
+@Table(name = "teams")
 data class Team(
         @Id @Column(name = "name") val teamName: String,
         @Column(name = "id") val teamId: Int?,
