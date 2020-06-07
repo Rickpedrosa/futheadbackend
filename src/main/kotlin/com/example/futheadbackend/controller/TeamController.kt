@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.web.bind.annotation.*
 
 @CrossOrigin(origins = ["http://localhost:4200"])
@@ -46,9 +48,11 @@ class TeamController(@Autowired private val teamService: TeamService) {
                 Sort.by("average").descending()))
     }
 
-    @RequestMapping(value = ["/random"])
+    @MessageMapping(value = ["/random"])
+    @SendTo("/topic/teams/random")
     @ResponseBody
-    fun getRandomTeams(@RequestParam("size") random: Int): List<RandomTeam> {
+    fun getRandomTeams(): List<RandomTeam> {
+        val random = 2
         return teamService.getRandomClubs(random)
     }
 }
