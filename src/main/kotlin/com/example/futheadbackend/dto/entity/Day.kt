@@ -7,5 +7,7 @@ import javax.persistence.*
 data class Day(
         @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Int,
         @Column(name = "day_date") val dayDate: String,
-        @Column(name = "id_tour") val idTour: Int
+        @ManyToOne
+        @JoinColumn(name = "id_tour")
+        val tournament: Tournament
 )

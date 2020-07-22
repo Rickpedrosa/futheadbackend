@@ -19,4 +19,10 @@ interface PlayerRepository : JpaRepository<Player, Int>, JpaSpecificationExecuto
 
     @Query(value = "SELECT * FROM players WHERE id = :id", nativeQuery = true)
     fun findPlayerById(id: Int): Player?
+
+    // FILTRO DE JUGADORES
+//    SELECT DISTINCT p.*
+//    FROM players p INNER JOIN playerpositions pos ON p.id = pos.player_id
+//    WHERE potential >= 85 AND value >= 10000000 AND pos.pos RLIKE 'CF|RW|ST' AND p.id NOT IN (158023)
+//    ORDER BY potential DESC
 }

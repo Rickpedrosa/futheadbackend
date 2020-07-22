@@ -1,71 +1,57 @@
-package com.example.futheadbackend.service
+package com.example.futheadbackend
+
 
 import com.example.futheadbackend.dto.entity.Day
 import com.example.futheadbackend.dto.entity.Match
 import com.example.futheadbackend.dto.entity.Tournament
 import com.example.futheadbackend.dto.entity.TournamentUser
-import com.example.futheadbackend.dto.response.*
 import com.example.futheadbackend.repository.DayRepository
 import com.example.futheadbackend.repository.MatchRepository
 import com.example.futheadbackend.repository.TournamentRepository
 import com.example.futheadbackend.repository.TournamentUserRepository
-import com.example.futheadbackend.repository.impls.TournamentRepositoryImpl
-import com.example.futheadbackend.utils.getMapFromList
 import com.example.futheadbackend.utils.isOdd
-import com.example.futheadbackend.utils.reorderItemsForward
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
+import org.springframework.boot.test.context.SpringBootTest
 import javax.transaction.Transactional
 
-@Suppress("DuplicatedCode")
-@Service
-@Transactional
-class TournamentService(
+@SpringBootTest
+class TournamentTest(
         @Autowired private val tournamentRepository: TournamentRepository,
         @Autowired private val dayRepository: DayRepository,
         @Autowired private val matchRepository: MatchRepository,
         @Autowired private val tournamentUserRepository: TournamentUserRepository
-) : TournamentRepositoryImpl {
-    override fun createTournament(
-            tournament: Tournament,
-            roundTrip: Boolean,
-            usersToPlay: List<String>
-    ): OnSaveTournamentResponse {
-        val tournamentResponse = getTournamentResponseObject(tournament, usersToPlay)
-        val daysResponse = getDaysResponseObject(tournament, roundTrip, usersToPlay)
-        return OnSaveTournamentResponse(
-                DataTournament(tournamentResponse, daysResponse)
-        )
+) {
+
+    @Test
+    //@Transactional
+    fun testSaveJPAMethodTournament() {
+        //tournamentRepository.deleteAll()
+        val tour = Tournament(0, "Prueba220720201159", "LG", "hoy")
+        val players = listOf("Pepito", "Jaimito", "Astorguecito")
+        val saved = tournamentRepository.save(tour)
+        players.forEach {
+            tournamentUserRepository.save(TournamentUser(0, saved.id, it))
+        }
+        println(saved)
     }
 
-    private fun getDaysResponseObject(tournament: Tournament, roundTrip: Boolean, usersToPlay: List<String>): List<DayResponse> {
-        val daysGoOnly = if (usersToPlay.size.isOdd()) usersToPlay.size else (usersToPlay.size - 1)
-        val daysRoundTrip = if (usersToPlay.size.isOdd()) (usersToPlay.size * 2) else (usersToPlay.size * 2) - 2
+    @Test
+    fun testSaveJPAMethodDay() {
+        dayRepository.deleteAll()
+        matchRepository.deleteAll()
+        val tournament = tournamentRepository.findById(2)
+        val roundTrip = true
+        val players = listOf("Pepito", "Jaimito", "Astorguecito")
+        val daysGoOnly = if (players.size.isOdd()) players.size else (players.size - 1)
+        val daysRoundTrip = if (players.size.isOdd()) (players.size * 2) else (players.size * 2) - 2
         val numberOfDays = if (roundTrip) daysRoundTrip else daysGoOnly
+        var matchesPerJornada = players.toMutableList()
+
         val listOfDays = mutableListOf<Day>()
         for (i in 0 until numberOfDays) {
-            listOfDays.add(dayRepository.save(Day(0, "xd", tournament)))
+            listOfDays.add(dayRepository.save(Day(0, "xd", tournament.get())))
         }
-        val matches = getMatchesResponseObject(listOfDays, usersToPlay, tournament, roundTrip, daysRoundTrip, daysGoOnly)
-        val dayResponseList = mutableListOf<DayResponse>()
-        listOfDays.forEach { day ->
-            dayResponseList.add(DayResponse(
-                    day.id,
-                    day.dayDate,
-                    matches.filter { it.dayId == day.id }
-            ))
-        }
-        return dayResponseList
-    }
-
-    private fun getMatchesResponseObject(days: List<Day>,
-                                         usersToPlay: List<String>,
-                                         tournament: Tournament,
-                                         roundTrip: Boolean,
-                                         daysRoundTrip: Int,
-                                         daysGoOnly: Int
-    ): List<MatchResponse> {
-        var matchesPerJornada = usersToPlay.toMutableList()
 
         val listOfMatches: MutableList<Match> = mutableListOf()
         if (roundTrip) {
@@ -75,8 +61,8 @@ class TournamentService(
                         if (it.first != "-" && it.second != "-") {
                             listOfMatches.add(matchRepository.save(Match(
                                     0,
-                                    days[i],
-                                    tournament,
+                                    listOfDays[i],
+                                    tournament.get(),
                                     "start",
                                     "end",
                                     0,
@@ -93,8 +79,8 @@ class TournamentService(
                         if (it.first != "-" && it.second != "-") {
                             listOfMatches.add(matchRepository.save(Match(
                                     0,
-                                    days[i],
-                                    tournament,
+                                    listOfDays[i],
+                                    tournament.get(),
                                     "start",
                                     "end",
                                     0,
@@ -115,8 +101,8 @@ class TournamentService(
                     if (it.first != "-" && it.second != "-") {
                         listOfMatches.add(matchRepository.save(Match(
                                 0,
-                                days[i],
-                                tournament,
+                                listOfDays[i],
+                                tournament.get(),
                                 "start",
                                 "end",
                                 0,
@@ -131,30 +117,34 @@ class TournamentService(
                 matchesPerJornada = matchesPerJornada.reorderItemsForward()
             }
         }
-        return listOfMatches.map {
-            MatchResponse(
-                    it.id,
-                    it.day.id,
-                    it.timeStart,
-                    it.timeEnd,
-                    it.scoreHome,
-                    it.scoreAway,
-                    it.idEvent,
-                    it.idType,
-                    it.participantHome,
-                    it.participantAway
-            )
-        }
+        listOfMatches.forEach(::println)
     }
+}
 
-    private fun getTournamentResponseObject(tournament: Tournament, usersToPlay: List<String>): TournamentResponse {
-        val tournament1 = tournamentRepository.save(tournament)
-        usersToPlay.forEach {
-            tournamentUserRepository.save(TournamentUser(0, tournament1.id, it))
-        }
-        return TournamentResponse(
-                tournament1,
-                usersToPlay
-        )
+fun MutableList<String>.reorderItemsForward(): MutableList<String> {
+    val element = this[this.size - 1]
+    val fixedPosition = if (this.size.isOdd()) 0 else 1
+    this.removeAt(this.size - 1)
+    this.add(fixedPosition, element)
+    return this
+}
+
+fun MutableList<String>.getMapFromList(swapHomeForAway: Boolean = false): MutableList<Pair<String, String>> {
+    val map = mutableListOf<Pair<String, String>>()
+    val listOne = this.slice(0 until (this.size / 2)).toMutableList()
+    val sizeForLoop = if (this.size.isOdd()) {
+        listOne.add("-")
+        listOne.size
+    } else {
+        (this.size / 2)
     }
+    val listTwo = this.minus(listOne)
+    for (i in 0 until sizeForLoop) {
+        if (swapHomeForAway) {
+            map.add(Pair(listTwo[i], listOne[i]))
+        } else {
+            map.add(Pair(listOne[i], listTwo[i]))
+        }
+    }
+    return map
 }
