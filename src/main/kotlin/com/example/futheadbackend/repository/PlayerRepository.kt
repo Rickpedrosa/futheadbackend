@@ -23,6 +23,10 @@ interface PlayerRepository : JpaRepository<Player, Int>, JpaSpecificationExecuto
     // FILTRO DE JUGADORES
 //    SELECT DISTINCT p.*
 //    FROM players p INNER JOIN playerpositions pos ON p.id = pos.player_id
-//    WHERE potential >= 85 AND value >= 10000000 AND pos.pos RLIKE 'CF|RW|ST' AND p.id NOT IN (158023)
-//    ORDER BY potential DESC
+//    WHERE p.club LIKE 'juventus' AND p.value >= 100000 AND p.potential >= 85 AND pos.pos RLIKE 'GK|SW'
+//    AND p.id NOT IN
+//    (SELECT pog.id
+//    FROM players pog INNER JOIN tournament_user_player champ ON pog.id = champ.player_id
+//    WHERE champ.tournament_id = 3)
+//    ORDER BY p.potential DESC
 }

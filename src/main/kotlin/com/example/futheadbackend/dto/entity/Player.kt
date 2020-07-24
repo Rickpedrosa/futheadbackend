@@ -1,11 +1,13 @@
 package com.example.futheadbackend.dto.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
 @Table(name = "players")
 data class Player(
         @ManyToOne
+        @JsonIgnore
         @JoinColumn(name = "club")
         val club: Team,
         @Id @Column(name = "id") val playerId: Int,

@@ -15,6 +15,9 @@ import com.example.futheadbackend.utils.isOdd
 import com.example.futheadbackend.utils.reorderItemsForward
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.transaction.Transactional
 
 @Suppress("DuplicatedCode")
@@ -26,6 +29,8 @@ class TournamentService(
         @Autowired private val matchRepository: MatchRepository,
         @Autowired private val tournamentUserRepository: TournamentUserRepository
 ) : TournamentRepositoryImpl {
+    private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("DD/MM/yyyy HH:mm:ss")
+//    LocalDateTime.now().format(timeFormatter)
     override fun createTournament(
             tournament: Tournament,
             roundTrip: Boolean,
@@ -44,7 +49,7 @@ class TournamentService(
         val numberOfDays = if (roundTrip) daysRoundTrip else daysGoOnly
         val listOfDays = mutableListOf<Day>()
         for (i in 0 until numberOfDays) {
-            listOfDays.add(dayRepository.save(Day(0, "xd", tournament)))
+            listOfDays.add(dayRepository.save(Day(0, "", tournament)))
         }
         val matches = getMatchesResponseObject(listOfDays, usersToPlay, tournament, roundTrip, daysRoundTrip, daysGoOnly)
         val dayResponseList = mutableListOf<DayResponse>()
@@ -77,8 +82,8 @@ class TournamentService(
                                     0,
                                     days[i],
                                     tournament,
-                                    "start",
-                                    "end",
+                                    "",
+                                    "",
                                     0,
                                     0,
                                     15,
@@ -95,8 +100,8 @@ class TournamentService(
                                     0,
                                     days[i],
                                     tournament,
-                                    "start",
-                                    "end",
+                                    "",
+                                    "",
                                     0,
                                     0,
                                     15,
@@ -117,8 +122,8 @@ class TournamentService(
                                 0,
                                 days[i],
                                 tournament,
-                                "start",
-                                "end",
+                                "",
+                                "",
                                 0,
                                 0,
                                 15,
